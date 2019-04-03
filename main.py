@@ -147,7 +147,7 @@ def test(config):
     wordemb = np.loadtxt(os.path.join(data_dir, config.wordmat_file))
     targetemb = np.loadtxt(os.path.join(data_dir, config.targetmat_file))
     # init model
-    model = Hair(kernel_size=config.kernel_size, num_channel=config.num_channel, dim_middle=config.dim_middle,
+    model = Model(kernel_size=config.kernel_size, num_channel=config.num_channel, dim_middle=config.dim_middle,
                  num_concept=config.num_concept, dim_concept=config.dim_concept, num_classification=config.num_class,
                  maxlen=config.sent_limit, dim_word=config.dim_word, dropout_rate=config.dropout_rate, wordemb=wordemb, targetemb=targetemb)
     # load model
