@@ -1,9 +1,8 @@
 from absl import flags
 import time
 import datetime
-import os
 
-flags.DEFINE_string('model', 'hair', 'Hierarchical Attention with Implicit concept Representation')
+flags.DEFINE_string('model', 'mcsc', 'Hierarchical Attention with Implicit concept Representation')
 # data input files
 flags.DEFINE_string('dataset', 'lap', 'the dataset to use for train and test, lap/res/res_cat')
 flags.DEFINE_string('laptop_train_xml', 'data/laptop/Laptops_Train_v2.xml', 'laptop dataset, train xml file path')
@@ -15,8 +14,8 @@ flags.DEFINE_string('restaurant_test_xml', 'data/restaurant/Restaurants_Test_Gol
                     'restaurant dataset, test gold xml file path')
 flags.DEFINE_string('twitter_train_xml', 'data/twitter/train.xml', '')
 flags.DEFINE_string('twitter_test_xml', 'data/twitter/test.xml', '')
-flags.DEFINE_string('stock_train_xml', 'data/senti-stock/middle-train.xml', '')
-flags.DEFINE_string('stock_test_xml', 'data/senti-stock/middle-test.xml', '')
+flags.DEFINE_string('stock_train_xml', '../senti-stock/middle-train.xml', '')
+flags.DEFINE_string('stock_test_xml', '../senti-stock/middle-test.xml', '')
 flags.DEFINE_string('glove_file', 'data/glove/glove.840B.300d.txt', 'glove embedding file path')
 # data output files
 flags.DEFINE_string('train_data', 'train.json', 'save train examples in this file')

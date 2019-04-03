@@ -36,7 +36,7 @@ class Attention(nn.Module):
 class Model(nn.Module):
     def __init__(self, kernel_size, num_channel, dim_middle, num_concept,
                  dim_concept, num_classification, maxlen, dim_word, dropout_rate, wordemb, targetemb):
-        super(Hair, self).__init__()
+        super(Model, self).__init__()
         self.kernel_size = kernel_size
         self.num_channel = num_channel
         self.dim_middle = dim_middle
