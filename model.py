@@ -55,6 +55,7 @@ class Model(nn.Module):
         # self.conv = nn.Conv1d(dim_word, num_channel, kernel_size)
         self.dropout = nn.Dropout(dropout_rate)
         self.linear = nn.Linear(num_channel * len(self.kernel_sizes), num_classification, True)
+        self.number_target = targetemb.shape[0]
         self.stock_linear = nn.Linear(dim_word, num_channel, True)
 
     def forward(self, sent, target, lens):
@@ -67,10 +68,15 @@ class Model(nn.Module):
         x = self.emb_matrix(sent).view(
             sent.shape[0], sent.shape[1], -1)  # batch * maxlen * dim_word
         target_x = self.target_matrix(target).view(target.shape[0], -1)  # batch * dim_word
-        stock_coefficient = torch.tanh(self.stock_linear(target_x))
+        stock_coefficient = torch.tanh(self.stock_linear(self.target_matrix.weight)) # number_target, num_channel
         h = [F.relu(conv(x.transpose(1, 2))) for conv in self.conv_list]  # batch, num_channel, len
-        r = [F.max_pool1d(a, a.size(2)).squeeze(2) * stock_coefficient for a in h]
-        r = torch.cat(r, -1)
+        r = [F.max_pool1d(a, a.size(2)).transpose(1, 2) * stock_coefficient.unsqueeze(0) for a in h] # batch, number_target, num_channel
+        r = torch.cat(r, -1) # batch, number_target, K * num_channel
+        g = torch.matmul(target_x, self.target_matrix.weight.transpose(0, 1)) # batch, number_target 
+        alpha = torch.softmax(g, -1) # batch, number_target 
+        alpha = alpha.unsqueeze(1) # batch, 1, number_target 
+        r = torch.bmm(alpha, r) # batch, 1, K * num_channel  
+        r = r.squeeze(1) # batch, K * num_channel 
         r = self.dropout(r)
         logit = self.linear(r)
         return logit
